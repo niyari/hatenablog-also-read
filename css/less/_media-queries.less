@@ -1,0 +1,41 @@
+﻿/* Media Queries - Tablet */
+@media (min-width: 801px) and (max-width: 1040px) {
+}
+/* Media Queries - Small Tablet & Smartphone */
+@media (max-width: 800px) {
+    .js-htnpsne-awasete-control {
+        position: relative;
+        float: none;
+        clear: both;
+        display: block;
+        text-align: center;
+
+        select {
+            width: 90%; /* fallback */
+            width: ~"calc(100% - 1.1em)";
+        }
+
+        button {
+            width: 33.1%; /* fallback */
+            width: ~"calc(100% / 3 - 2px)";
+        }
+    }
+}
+/* Media Queries - Smartphone */
+@media (max-width: 480px) {
+    .js-htnpsne-awasete-control {
+        font-size: 1.5em;
+    }
+
+    .js-htnpsne-awasete-btn-reload span {
+        display: none;
+    }
+
+    .js-htnpsne-awasete-btn-readmore span {
+        display: none;
+    }
+
+    .js-htnpsne-awasete-btn-subscribe span {
+        display: none;
+    }
+}

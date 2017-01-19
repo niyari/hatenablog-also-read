@@ -1,0 +1,146 @@
+﻿@charset "utf-8";
+/* 
+    HatenaBlog Also read (c) 2015,2017 Pocket Systems. http://psn.hatenablog.jp/entry/also-read
+*/
+/*  import normalize */
+/*  import mixin */
+/*  import variable */
+.js-htnpsne-awasete-module {
+  padding: 0.2em 0;
+}
+.js-htnpsne-awasete-control-outer {
+  font-size: 1em;
+  font-weight: initial;
+}
+.js-htnpsne-awasete-control {
+  float: right;
+}
+.js-htnpsne-awasete-control:after {
+  content: '';
+  clear: both;
+  height: 0;
+  display: block;
+  visibility: hidden;
+}
+.js-htnpsne-awasete-control i {
+  font-size: 85%;
+}
+.js-htnpsne-awasete-control i:after {
+  padding-left: 0.3em;
+}
+.js-htnpsne-awasete-control > a {
+  font-size: 1.2em;
+  text-decoration: none;
+}
+.js-htnpsne-awasete-control select {
+  margin: 0 1px;
+  border-width: 0 0 1px 0;
+}
+.js-htnpsne-awasete-control button {
+  background: #FFFFFF;
+  border: solid 1px #D8D8D8;
+  border-radius: 3px;
+  margin: 0 1px;
+  padding: 2px .6em;
+}
+.js-htnpsne-awasete-control .js-htnpsne-awasete-title {
+  font-size: 1.143em;
+  font-weight: bold;
+  padding-left: 0.3em;
+  border-left: solid 3px #888;
+}
+.js-htnpsne-awasete-entrys ul {
+  padding: .5em;
+}
+.js-htnpsne-awasete-entrys li {
+  padding: .2em;
+  list-style: none;
+  border-bottom: solid 1px;
+}
+.js-htnpsne-awasete-entrys li:first-child {
+  border-top: solid 1px;
+}
+.js-htnpsne-awasete-entrys li a {
+  text-decoration: none;
+}
+.js-htnpsne-awasete-entrys li .bookmark-count {
+  vertical-align: text-bottom;
+}
+.js-htnpsne-awasete-entrys .js-htnpsne-awasete-embed-blogcard {
+  width: 100%;
+  display: block;
+}
+/* ボタン装飾 */
+.js-htnpsne-awasete-btn-reload span:after {
+  content: '再読み込み';
+}
+.js-htnpsne-awasete-btn-readmore span:after {
+  content: 'もっと見る';
+}
+.js-htnpsne-awasete-btn-subscribe span:after {
+  content: '購読する';
+}
+/* サイドバー */
+.hatena-module-body .js-htnpsne-awasete-control {
+  position: relative;
+  float: none;
+  clear: both;
+  display: block;
+  text-align: center;
+}
+.hatena-module-body .js-htnpsne-awasete-control select {
+  width: 90%;
+  /* fallback */
+  width: calc(100% - 1.1em);
+}
+.hatena-module-body .js-htnpsne-awasete-control button {
+  width: 33.1%;
+  /* fallback */
+  width: calc(31.33333333%);
+}
+.hatena-module-body .js-htnpsne-awasete-btn-reload span {
+  display: none;
+}
+.hatena-module-body .js-htnpsne-awasete-btn-readmore span {
+  display: none;
+}
+.hatena-module-body .js-htnpsne-awasete-btn-subscribe span {
+  display: none;
+}
+/*  import media queries */
+/* Media Queries - Tablet */
+/* Media Queries - Small Tablet & Smartphone */
+@media (max-width: 800px) {
+  .js-htnpsne-awasete-control {
+    position: relative;
+    float: none;
+    clear: both;
+    display: block;
+    text-align: center;
+  }
+  .js-htnpsne-awasete-control select {
+    width: 90%;
+    /* fallback */
+    width: calc(100% - 1.1em);
+  }
+  .js-htnpsne-awasete-control button {
+    width: 33.1%;
+    /* fallback */
+    width: calc(100% / 3 - 2px);
+  }
+}
+/* Media Queries - Smartphone */
+@media (max-width: 480px) {
+  .js-htnpsne-awasete-control {
+    font-size: 1.5em;
+  }
+  .js-htnpsne-awasete-btn-reload span {
+    display: none;
+  }
+  .js-htnpsne-awasete-btn-readmore span {
+    display: none;
+  }
+  .js-htnpsne-awasete-btn-subscribe span {
+    display: none;
+  }
+}
