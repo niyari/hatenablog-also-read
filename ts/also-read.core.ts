@@ -1,6 +1,7 @@
 ﻿/// <reference path="also-read.header.ts" />
 /// <reference path="htnpsne.api.ts" />
 /* tslint:disable:no-string-literal */
+
 namespace Htnpsne.Alsoread {
     "use strict";
     let blogsUriBase: string = Htnpsne.API.htmlTagData.blogsUriBase;
@@ -10,14 +11,15 @@ namespace Htnpsne.Alsoread {
     let loadCSS: boolean = true;
     let categoryList: string[] = [];
     let feedlyURL: string = "http://cloud.feedly.com/#subscription%2Ffeed%2F";
-    let externalCSS: string = "//niyari.github.io/hatenablog-modules/css/also-read.css";
+    let externalCSS: string = "//niyari.github.io/hatenablog-modules/css/also-read.min.css";
     let defaultModuleTitle: string = "あわせて読みたい";
+    let disableModuleExecuteTest: boolean = false;
 
     // カテゴリリスト取得
     function getCategoryList(): string[] {
         let list: string[] = [];
         let targetDomain: string = blogsUriBase.split("://")[1];
-        // TODO: "body.page-entry div.categories a" のみで良い/スマホ版の「記事下のカテゴリ表示」に対応
+        // "body.page-entry div.categories a" のみで良い/スマホ版の「記事下のカテゴリ表示」に対応
         let selector: string = "body.page-entry div.categories a";
         let entryCategoryList: NodeList = document.querySelectorAll(selector);
         for (let i: number = 0; i < entryCategoryList.length; i++) {
@@ -56,7 +58,7 @@ namespace Htnpsne.Alsoread {
         });
     }
 
-    // JSONP(はてなブックマーク)受信
+    // はてなブックマーク(JSONP)受信
     function getHatebu(targetID: string, url: string): void {
         let list: any = [];
         $.ajax({
@@ -98,13 +100,14 @@ namespace Htnpsne.Alsoread {
             let targetElem: HTMLElement = <HTMLElement>target[i];
 
             if (targetElem.dataset["userCss"] === "true") { loadCSS = false; }
+            if (targetElem.dataset["disableModuleExecuteTest"] === "true") { disableModuleExecuteTest = true; }
 
             let mode: string = targetElem.dataset["mode"];
             // カテゴリーが設定されていない事がある　ランダムでも良いかもしれない
             if (categoryList.length === 0) {
-                mode = listShuffle(["Recent", "Popular"])[0];
+                mode = Htnpsne.API.listShuffle(["Recent", "Popular"])[0];
             } else {
-                categoryList = listShuffle(categoryList);
+                categoryList = Htnpsne.API.listShuffle(categoryList);
             }
             if (mode === "Popular") {
                 createModuleBody(targetElem, Math.random().toString(36).slice(6), "Popular");
@@ -124,7 +127,7 @@ namespace Htnpsne.Alsoread {
             // デフォルトCSS読み込み
             setupCSS(externalCSS);
         }
-        if (Htnpsne.API.htmlTagData.page === "about") {
+        if (Htnpsne.API.htmlTagData.page === "about" && disableModuleExecuteTest === true) {
             // 描画用コードの動作確認
             moduleExecuteTest();
         };
@@ -133,9 +136,44 @@ namespace Htnpsne.Alsoread {
 
     // 描画用コードの動作確認
     function moduleExecuteTest(): void {
-        // TODO
-        return;
+        let elm_aboutContent: any, elm_div: HTMLElement;
+        if (document.getElementById("Htnpsne-about-elem") == null) {
+            if (document.querySelector(".about-subscription-count") != null) {
+                // 最後から2番目に追加
+                elm_aboutContent = document.querySelectorAll("div.entry-content dt");
+                elm_aboutContent = elm_aboutContent[elm_aboutContent.length - 1];
+                elm_div = document.createElement("dt");
+                elm_div.innerText = "ブログ拡張機能";
+                elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent);
+                elm_div = document.createElement("dd");
+                elm_div.id = "Htnpsne-about-elem";
+                elm_aboutContent.parentNode.insertBefore(elm_div, elm_aboutContent);
+            } else {
+                // 最後に追加
+                elm_aboutContent = document.querySelectorAll("div.entry-content dd");
+                if (elm_aboutContent.length === 0) {
+                    // aboutページのコンテンツが空なのでdivを入れる
+                    elm_div = document.createElement("div");
+                    elm_aboutContent = document.querySelector("div.entry-content");
+                    elm_aboutContent.appendChild(elm_div);
+                    elm_aboutContent = elm_div;
+                } else {
+                    elm_aboutContent = elm_aboutContent[elm_aboutContent.length - 1];
+                }
+                elm_div = document.createElement("dt");
+                elm_div.textContent = "ブログ拡張機能";
+                elm_aboutContent.parentNode.appendChild(elm_div);
+                elm_div = document.createElement("dd");
+                elm_div.id = "Htnpsne-about-elem";
+                elm_aboutContent.parentNode.appendChild(elm_div);
+            }
+        }
+        elm_aboutContent = document.getElementById("Htnpsne-about-elem");
+        elm_div = document.createElement("div");
+        elm_div.innerHTML = "<a href=\"http://psn.hatenablog.jp/entry/also-read\" target=\"_blank\">Also read(はてなブログ あわせて読みたい) を利用中です。</a>";
+        elm_aboutContent.appendChild(elm_div);
     }
+
     // CSSをリンクする
     function setupCSS(url: string): void {
         let elmSideMenuCSS: HTMLLinkElement = document.createElement("link");
@@ -144,25 +182,6 @@ namespace Htnpsne.Alsoread {
         elmSideMenuCSS.type = "text/css";
         document.getElementsByTagName("head")[0].appendChild(elmSideMenuCSS);
     }
-    // Fisher-Yatesアルゴリズムでシャッフルする
-    function listShuffle(a: any): any {
-        let b: number, c: number, d: any; a = a.slice();
-        b = a.length;
-        if (0 === b) { return a; };
-        for (; --b;) {
-            c = Math.floor(Math.random() * (b + 1));
-            d = a[b];
-            a[b] = a[c];
-            a[c] = d;
-        };
-        return a;
-    }
-    // 文字列をエスケープするやつ
-    /*
-    function escapeHtml(a) {
-        return a.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    };
-     */
 
     // リスト生成
     function insertEntryList(targetID: string, list: any): void {
@@ -181,7 +200,7 @@ namespace Htnpsne.Alsoread {
                 "title": "ブログTOPへ"
             }];
         }
-        list = listShuffle(list);
+        list = Htnpsne.API.listShuffle(list);
         if (count > list.length) {
             count = list.length;
         } else if (count === 0) {
@@ -214,7 +233,7 @@ namespace Htnpsne.Alsoread {
             // iframe版はdisplayBookmark_countはtrue扱いとなる
             for (let i: number = 0; i < count; i++) {
                 let elem: HTMLIFrameElement = document.createElement("iframe");
-                // TODO: 新設class js-htnpsne-awasete-embed-blogcard / width:"100%" display:"block"
+                // 新設class js-htnpsne-awasete-embed-blogcard / width:"100%" display:"block"
                 elem.className = "embed-card embed-blogcard js-htnpsne-awasete-embed-blogcard";
                 elem.style.display = "block";
                 elem.style.width = "100%";
@@ -487,10 +506,9 @@ namespace Htnpsne.Alsoread {
     function openNewWindow(url: string): void {
         window.open(url);
     }
-    /*
-    * DOM生成完了時にスタート
-    */
+    // DOM生成完了時にスタート
     if (document.readyState === "uninitialized" || document.readyState === "loading") {
+        // memo IE10 以下ではdocument.readyState === "interactive" で判定できるが、datasetが使えないので考慮しない
         window.addEventListener("DOMContentLoaded", function (): void {
             setupModule();
         }, false);

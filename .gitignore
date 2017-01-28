@@ -253,3 +253,8 @@ paket-files/
 
 # custom
 ts/typings/
+/.test
+/compilerconfig.json
+/compilerconfig.json.defaults
+*.config
+*.csproj
