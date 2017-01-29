@@ -36,7 +36,6 @@ namespace Htnpsne.Alsoread {
         $.ajax({
             dataType: "xml",
             url: url
-            // url: './sandbox.xml'
         }).done(function (data: any, status: any, xhr: any): void {
             // RSSリスト整形
             $(data).find("item").each(function (): void {
