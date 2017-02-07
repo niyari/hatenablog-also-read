@@ -58,7 +58,10 @@ namespace Htnpsne.API {
          */
         blogsUriBase: string;
         /**
-         * 基本的に "hatenablog" 。はてなブログMedia利用時にカスタマイズされると固有の値になる
+         * 基本的に "hatenablog"
+         * はてなブログMedia利用時にカスタマイズされると固有の値になる。 Pro同等の場合 "regular_plan" など。
+         * SSL/TLS化、サブディレクトリに設置など、柔軟なカスタマイズが可能な「はてなブログMedia」を どうぞご利用ください。
+         * http://hatenablog.com/guide/media
          */
         brand: string;
         /**
@@ -83,6 +86,7 @@ namespace Htnpsne.API {
         initialState: string;
         /**
          * ページフォーマット。"index" "entry"など
+         * はてなブログMediaでは "page"(ブログ記事ではない カスタムページ)がある
          */
         page: string;
         /**
@@ -91,6 +95,7 @@ namespace Htnpsne.API {
         plusAvailable: string;
         /**
          * はてなブログPro フラグ "true" または "false"
+         * はてなブログMediaでは "true" 固定(要検証)
          */
         pro: string;
         /**
